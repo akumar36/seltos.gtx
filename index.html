@@ -461,6 +461,36 @@
     .c-tv   { --c: #ffc24f; }
     .c-hack { --c: var(--violet); }
 
+    /* Disabled card: no hover effects, dimmed, "Down" status pill */
+    .card.is-down { --c: #ff9f43; cursor: not-allowed; }
+    .card.is-down:hover { transform: none; border-color: var(--line); box-shadow: none; }
+    .card.is-down::before,
+    .card.is-down::after { display: none; }
+    .card.is-down img { filter: grayscale(1) brightness(0.6); }
+    .card.is-down .title { color: var(--muted); }
+    .down-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c);
+    }
+    .down-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--c);
+      box-shadow: 0 0 8px var(--c);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
     /* ---------- Footer ---------- */
     footer {
       margin-top: 44px;
@@ -607,15 +637,17 @@
         </a>
       </li>
       <li style="--d:4">
-        <a class="card c-hack" href="https://yt-chi-seven.vercel.app" target="_blank" rel="noopener">
+        <!-- Temporarily down. To re-enable, restore:
+             <a class="card c-hack" href="https://yt-chi-seven.vercel.app" target="_blank" rel="noopener"> ... </a> -->
+        <div class="card c-hack is-down" aria-disabled="true">
           <img src="assets/yt-hack.jpg" alt="" width="52" height="52">
           <span class="meta">
-            <span class="top"><span>05</span><span class="tag">Hack</span></span>
+            <span class="top"><span>05</span><span class="tag">Offline</span></span>
             <span class="title">Fullscreen YouTube hack</span>
-            <span class="sub">yt-chi-seven.vercel.app</span>
+            <span class="sub">Temporarily down · back soon</span>
           </span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
+          <span class="down-pill">Down</span>
+        </div>
       </li>
     </ul>
 
