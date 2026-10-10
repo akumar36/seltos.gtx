@@ -456,6 +456,14 @@
       transform: rotate(-45deg);
     }
 
+    /* Featured (full-width) tile: same slim height as the compact tiles */
+    .links li.feature .card { grid-template-columns: 40px 1fr auto; gap: 12px; padding: 9px 12px 9px 10px; }
+    .links li.feature .card img { width: 40px; height: 40px; border-radius: 9px; }
+    .links li.feature .card .title { margin-top: 1px; font-size: 1rem; line-height: 1.2; }
+    .links li.feature .card .sub { margin-top: 1px; }
+    .links li.feature .card .go { width: 30px; height: 30px; }
+    .links li.feature .card .go svg { width: 14px; height: 14px; }
+
     /* Compact 2-up tiles: small icon left, tag + name right */
     .links li:not(.feature) .card {
       grid-template-columns: 36px 1fr;
