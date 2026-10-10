@@ -318,10 +318,11 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
+    .links li.feature { grid-column: 1 / -1; }
 
     .links li {
       animation: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -454,6 +455,24 @@
       border-color: var(--c);
       transform: rotate(-45deg);
     }
+
+    /* Compact 2-up tiles: icon + arrow on top, label below */
+    .links li:not(.feature) .card {
+      grid-template-columns: 40px 1fr;
+      grid-template-areas: "img go" "meta meta";
+      align-items: start;
+      gap: 10px 8px;
+      height: 100%;
+      padding: 12px;
+    }
+    .links li:not(.feature) .card img { grid-area: img; width: 40px; height: 40px; border-radius: 9px; }
+    .links li:not(.feature) .card .go,
+    .links li:not(.feature) .card .down-pill { grid-area: go; justify-self: end; }
+    .links li:not(.feature) .card .go { width: 30px; height: 30px; }
+    .links li:not(.feature) .card .go svg { width: 14px; height: 14px; }
+    .links li:not(.feature) .card .meta { grid-area: meta; }
+    .links li:not(.feature) .card .title { font-size: 0.95rem; line-height: 1.25; }
+    .links li:not(.feature) .card .sub { display: none; }
 
     .c-fb   { --c: #4f8bff; }
     .c-yt   { --c: var(--red); }
@@ -720,7 +739,7 @@
     <div class="section-head"><span>// Quick links</span><b>05 routes</b></div>
 
     <ul class="links">
-      <li style="--d:0">
+      <li class="feature" style="--d:0">
         <a class="card c-yt" href="https://youtube.com/@seltosgtx" target="_blank" rel="noopener">
           <img src="assets/youtube.jpg" alt="" width="52" height="52">
           <span class="meta">
