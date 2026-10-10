@@ -525,16 +525,24 @@
     }
     .reels::-webkit-scrollbar { display: none; }
 
-    /* Wide screens: grid instead of a sideways-scrolling row */
-    @media (min-width: 600px) {
-      .reels {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        margin: 0;
-        padding: 4px 0 0;
-        overflow: visible;
-      }
+    .section-head .nav { display: inline-flex; align-items: center; gap: 10px; }
+    .scroll-btn {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--glass);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
     }
+    .scroll-btn svg { width: 14px; height: 14px; }
+    .scroll-btn:hover:not(:disabled),
+    .scroll-btn:focus-visible { border-color: var(--pink); color: var(--pink); outline: none; }
+    .scroll-btn:disabled { opacity: 0.3; cursor: default; }
 
     .reels li {
       flex: 0 0 158px;
@@ -798,9 +806,16 @@
       </li>
     </ul>
 
-    <div class="section-head"><span>// Useful tutorials</span><b>05 reels</b></div>
+    <div class="section-head">
+      <span>// Useful tutorials</span>
+      <span class="nav">
+        <b>05 reels</b>
+        <button class="scroll-btn" type="button" data-dir="-1" aria-label="Previous tutorials"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="scroll-btn" type="button" data-dir="1" aria-label="Next tutorials"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </span>
+    </div>
 
-    <ul class="reels">
+    <ul class="reels" id="reels">
       <li style="--d:0">
         <a class="reel" href="https://www.instagram.com/reel/DdxhnCcp4vj/" target="_blank" rel="noopener">
           <img src="assets/tutorials/aptv-tutorial.jpg" alt="" width="360" height="640" loading="lazy">
@@ -912,6 +927,23 @@
           setTimeout(type, delay);
         }, 1800);
       }
+
+      // Tutorials row: arrow buttons scroll by roughly two cards
+      var reels = document.getElementById("reels");
+      var btns = document.querySelectorAll(".scroll-btn");
+      function updateBtns() {
+        var max = reels.scrollWidth - reels.clientWidth - 2;
+        btns[0].disabled = reels.scrollLeft <= 2;
+        btns[1].disabled = reels.scrollLeft >= max;
+      }
+      btns.forEach(function (b) {
+        b.addEventListener("click", function () {
+          reels.scrollBy({ left: Number(b.dataset.dir) * 340, behavior: reduce ? "auto" : "smooth" });
+        });
+      });
+      reels.addEventListener("scroll", updateBtns, { passive: true });
+      window.addEventListener("resize", updateBtns);
+      updateBtns();
 
       // Cursor-following glow on cards
       document.querySelectorAll(".card").forEach(function (card) {
