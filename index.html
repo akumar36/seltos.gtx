@@ -456,23 +456,18 @@
       transform: rotate(-45deg);
     }
 
-    /* Compact 2-up tiles: icon + arrow on top, label below */
+    /* Compact 2-up tiles: small icon left, tag + name right */
     .links li:not(.feature) .card {
-      grid-template-columns: 40px 1fr;
-      grid-template-areas: "img go" "meta meta";
-      align-items: start;
-      gap: 10px 8px;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
       height: 100%;
-      padding: 12px;
+      padding: 10px 12px 10px 10px;
     }
-    .links li:not(.feature) .card img { grid-area: img; width: 40px; height: 40px; border-radius: 9px; }
+    .links li:not(.feature) .card img { width: 36px; height: 36px; border-radius: 8px; }
+    .links li:not(.feature) .card .title { margin-top: 2px; font-size: 0.92rem; line-height: 1.2; }
+    .links li:not(.feature) .card .sub,
     .links li:not(.feature) .card .go,
-    .links li:not(.feature) .card .down-pill { grid-area: go; justify-self: end; }
-    .links li:not(.feature) .card .go { width: 30px; height: 30px; }
-    .links li:not(.feature) .card .go svg { width: 14px; height: 14px; }
-    .links li:not(.feature) .card .meta { grid-area: meta; }
-    .links li:not(.feature) .card .title { font-size: 0.95rem; line-height: 1.25; }
-    .links li:not(.feature) .card .sub { display: none; }
+    .links li:not(.feature) .card .down-pill { display: none; }
 
     .c-fb   { --c: #4f8bff; }
     .c-yt   { --c: var(--red); }
