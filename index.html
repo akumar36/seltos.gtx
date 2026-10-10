@@ -491,6 +491,134 @@
       animation: blink 1.4s ease-in-out infinite;
     }
 
+    /* ---------- Tutorials (reel carousel) ---------- */
+    .reels {
+      list-style: none;
+      margin: 0 -16px;
+      padding: 4px 16px 12px;
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .reels::-webkit-scrollbar { display: none; }
+
+    /* Wide screens: grid instead of a sideways-scrolling row */
+    @media (min-width: 600px) {
+      .reels {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin: 0;
+        padding: 4px 0 0;
+        overflow: visible;
+      }
+    }
+
+    .reels li {
+      flex: 0 0 158px;
+      scroll-snap-align: start;
+      animation: rise 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--d) * 50ms + 300ms);
+    }
+
+    .reel {
+      position: relative;
+      display: block;
+      aspect-ratio: 9 / 16;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #0c0e1a;
+      color: var(--text);
+      text-decoration: none;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .reel img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .reel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(4, 5, 10, 0.95) 0%, rgba(4, 5, 10, 0.6) 32%, transparent 58%);
+    }
+    .reel:hover,
+    .reel:focus-visible {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--pink) 55%, transparent);
+      box-shadow: 0 12px 30px -12px color-mix(in srgb, var(--pink) 60%, transparent);
+      outline: none;
+    }
+    .reel:hover img,
+    .reel:focus-visible img { transform: scale(1.05); }
+
+    .reel .badge-ig {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(4, 5, 10, 0.7);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .reel .badge-ig svg { width: 11px; height: 11px; }
+
+    .reel .play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      margin: -22px 0 0 -22px;
+      border-radius: 50%;
+      background: rgba(4, 5, 10, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .reel .play svg { width: 16px; height: 16px; margin-left: 2px; }
+    .reel:hover .play,
+    .reel:focus-visible .play { background: var(--pink); border-color: var(--pink); }
+
+    .reel .cap {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 1;
+    }
+    .reel .cap small {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--pink);
+    }
+    .reel .cap span {
+      display: block;
+      margin-top: 3px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
     /* ---------- Footer ---------- */
     footer {
       margin-top: 44px;
@@ -648,6 +776,51 @@
           </span>
           <span class="down-pill">Down</span>
         </div>
+      </li>
+    </ul>
+
+    <div class="section-head"><span>// Useful tutorials</span><b>05 reels</b></div>
+
+    <ul class="reels">
+      <li style="--d:0">
+        <a class="reel" href="https://www.instagram.com/reel/DdxhnCcp4vj/" target="_blank" rel="noopener">
+          <img src="assets/tutorials/aptv-tutorial.jpg" alt="" width="360" height="640" loading="lazy">
+          <span class="badge-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Reel</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          <span class="cap"><small>01</small><span>APTV tutorial — YouTube on CarPlay</span></span>
+        </a>
+      </li>
+      <li style="--d:1">
+        <a class="reel" href="https://www.instagram.com/reel/DeRYkRZJVY0/" target="_blank" rel="noopener">
+          <img src="assets/tutorials/tv-channels.jpg" alt="" width="360" height="640" loading="lazy">
+          <span class="badge-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Reel</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          <span class="cap"><small>02</small><span>TV channels on CarPlay</span></span>
+        </a>
+      </li>
+      <li style="--d:2">
+        <a class="reel" href="https://www.instagram.com/reel/Dd_KMWQJzVr/" target="_blank" rel="noopener">
+          <img src="assets/tutorials/aptv-new-features.jpg" alt="" width="360" height="640" loading="lazy">
+          <span class="badge-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Reel</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          <span class="cap"><small>03</small><span>New features in APTV</span></span>
+        </a>
+      </li>
+      <li style="--d:3">
+        <a class="reel" href="https://www.instagram.com/reel/DeEkgloJTUS/" target="_blank" rel="noopener">
+          <img src="assets/tutorials/next-song-fullscreen.jpg" alt="" width="360" height="640" loading="lazy">
+          <span class="badge-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Reel</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          <span class="cap"><small>04</small><span>Next song fullscreen hack</span></span>
+        </a>
+      </li>
+      <li style="--d:4">
+        <a class="reel" href="https://www.instagram.com/reel/Dd85iQZpp4U/" target="_blank" rel="noopener">
+          <img src="assets/tutorials/zoom-fix.jpg" alt="" width="360" height="640" loading="lazy">
+          <span class="badge-ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Reel</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+          <span class="cap"><small>05</small><span>Zoom issue solution</span></span>
+        </a>
       </li>
     </ul>
 
