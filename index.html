@@ -2,28 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>@seltos.gtx</title>
   <meta name="description" content="Kia Seltos GTX 2026 — Aurora Black Pearl. Owner POV • Real reviews • No fluff.">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#04050a">
+  <meta name="color-scheme" content="dark">
   <meta property="og:title" content="@seltos.gtx">
   <meta property="og:description" content="Kia Seltos GTX 2026 — Aurora Black Pearl. Owner POV • Real reviews • No fluff.">
   <meta property="og:image" content="assets/profile.jpg">
   <meta property="og:type" content="profile">
   <link rel="icon" href="assets/profile.jpg">
   <link rel="apple-touch-icon" href="assets/profile.jpg">
+  <link rel="preload" href="assets/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/jetbrains-mono.woff2" as="font" type="font/woff2" crossorigin>
   <style>
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk.woff2") format("woff2");
+      font-weight: 300 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/jetbrains-mono.woff2") format("woff2");
+      font-weight: 100 800;
+      font-display: swap;
+    }
+
     :root {
-      --bg: #000;
-      --text: #fff;
-      --muted: rgba(255, 255, 255, 0.75);
-      --btn-bg: rgba(0, 0, 0, 0.85);
-      --btn-bg-hover: rgba(30, 30, 30, 0.9);
-      --btn-border: rgba(255, 255, 255, 0.12);
+      --bg: #04050a;
+      --text: #eef1ff;
+      --muted: #8b93b0;
+      --dim: #4a5170;
+      --cyan: #2de2e6;
+      --violet: #8a6cff;
+      --pink: #ff4fd8;
+      --red: #ff3b5c;
+      --glass: rgba(255, 255, 255, 0.045);
+      --glass-hi: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.09);
+      --sans: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     * { box-sizing: border-box; }
-
     html, body { margin: 0; }
 
     body {
@@ -31,184 +53,648 @@
       min-height: 100dvh;
       background: var(--bg);
       color: var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* Blurred profile photo behind everything, like the Linktree "blur" background */
-    .backdrop {
-      position: fixed;
-      inset: -40px;
-      background: url("assets/profile.jpg") center / cover no-repeat;
-      filter: blur(40px) brightness(0.45);
-      z-index: -1;
+    /* ---------- Background: aurora + moving road grid + grain ---------- */
+    .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+
+    .aurora span {
+      position: absolute;
+      width: 60vmax;
+      height: 60vmax;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      animation: drift 22s ease-in-out infinite alternate;
+    }
+    .aurora span:nth-child(1) { background: var(--cyan);   top: -25vmax; left: -15vmax; }
+    .aurora span:nth-child(2) { background: var(--violet); top: -10vmax; right: -25vmax; animation-delay: -7s; animation-duration: 26s; }
+    .aurora span:nth-child(3) { background: #1b2a8a;       bottom: -30vmax; left: 10vmax; animation-delay: -14s; opacity: 0.5; }
+
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(6vmax, 4vmax) scale(1.15); }
+      100% { transform: translate(-4vmax, 8vmax) scale(0.95); }
     }
 
+    .road {
+      position: absolute;
+      left: -50%;
+      right: -50%;
+      bottom: -10%;
+      height: 55%;
+      background-image:
+        linear-gradient(rgba(45, 226, 230, 0.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138, 108, 255, 0.35) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: perspective(420px) rotateX(62deg);
+      transform-origin: bottom;
+      mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+      -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 85%);
+      opacity: 0.35;
+      animation: drive 2.4s linear infinite;
+    }
+    @keyframes drive { to { background-position: 0 60px, 0 0; } }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- Layout ---------- */
     main {
-      max-width: 580px;
+      max-width: 560px;
       margin: 0 auto;
-      padding: 48px 16px 40px;
+      padding: 16px 16px 48px;
+    }
+
+    /* ---------- HUD status bar ---------- */
+    .statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(4, 5, 10, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .statusbar .live { display: inline-flex; align-items: center; gap: 7px; color: var(--text); }
+    .statusbar .live::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3dff9a;
+      box-shadow: 0 0 10px #3dff9a;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 50% { opacity: 0.3; } }
+    .statusbar time { color: var(--cyan); font-variant-numeric: tabular-nums; }
+
+    /* ---------- Hero ---------- */
+    .hero {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      margin-top: 32px;
     }
 
+    .gauge {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
+    .gauge svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .gauge .track { fill: none; stroke: rgba(255, 255, 255, 0.07); stroke-width: 3; }
+    .gauge .rev {
+      fill: none;
+      stroke: url(#revGrad);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 75 100;
+      stroke-dashoffset: 26;
+      filter: drop-shadow(0 0 6px rgba(45, 226, 230, 0.7));
+      animation: rev 2.2s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+    }
+    @keyframes rev {
+      0%   { stroke-dashoffset: 75; }
+      45%  { stroke-dashoffset: 4; }
+      100% { stroke-dashoffset: 26; }
+    }
+    .gauge .tick { stroke: rgba(255, 255, 255, 0.28); stroke-width: 1.2; }
+    .gauge .tick.major { stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.8; }
+    .gauge .tick.red { stroke: var(--red); }
+    .gauge .spin {
+      transform-origin: 100px 100px;
+      animation: spin 18s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .avatar {
-      width: 96px;
-      height: 96px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 124px;
+      height: 124px;
+      transform: translate(-50%, -50%);
       border-radius: 50%;
       object-fit: cover;
-      display: block;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 6px rgba(4, 5, 10, 0.6), 0 0 40px rgba(45, 226, 230, 0.25);
+    }
+
+    .gauge .badge {
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      transform: translateX(-50%);
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      color: #04050a;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.2em;
     }
 
     h1 {
-      font-size: 1.25rem;
+      margin: 20px 0 0;
+      font-size: clamp(2rem, 8vw, 2.6rem);
       font-weight: 700;
-      margin: 16px 0 6px;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      background: linear-gradient(110deg, #ffffff 0%, #b9c4ff 25%, #9ff5ea 45%, #ffffff 60%, #d8c4ff 80%, #ffffff 100%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: pearl 8s ease-in-out infinite alternate;
     }
+    @keyframes pearl { to { background-position: 100% 0; } }
 
-    .bio {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .socials {
+    /* Welcome LED light bar */
+    .led {
       display: flex;
-      gap: 12px;
-      margin: 16px 0 24px;
+      gap: 5px;
+      margin: 14px 0 0;
+    }
+    .led i {
+      width: 6px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      animation: led 1.6s ease-out both;
+      animation-delay: calc(var(--i) * 45ms + 300ms);
+    }
+    @keyframes led {
+      0%   { background: rgba(255, 255, 255, 0.1); box-shadow: none; }
+      30%  { background: #fff; box-shadow: 0 0 10px #fff, 0 0 18px var(--cyan); }
+      100% { background: var(--cyan); box-shadow: 0 0 6px rgba(45, 226, 230, 0.8); }
     }
 
-    .socials a {
-      color: var(--text);
+    .typed {
+      margin: 14px 0 0;
+      min-height: 1.5em;
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .typed .prompt { color: var(--cyan); }
+    .typed .caret {
+      display: inline-block;
+      width: 0.55em;
+      height: 1.1em;
+      margin-left: 2px;
+      vertical-align: -0.2em;
+      background: var(--cyan);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .chips li {
       display: inline-flex;
-      padding: 6px;
-      border-radius: 8px;
-      transition: transform 0.15s ease;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--glass);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .chips .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: conic-gradient(from 200deg, #0b0c12, #2a2f45, #0b0c12, #3b3360, #0b0c12, #1e3b46, #0b0c12);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
     }
 
-    .socials a:hover { transform: scale(1.1); }
-
-    .socials svg { width: 28px; height: 28px; }
+    /* ---------- Links ---------- */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 2px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .section-head b { color: var(--muted); font-weight: 500; }
 
     .links {
       list-style: none;
       margin: 0;
       padding: 0;
-      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .links a {
+    .links li {
+      animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--d) * 90ms + 500ms);
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .card {
+      --mx: 50%;
+      --my: 50%;
+      --c: var(--cyan);
       position: relative;
-      display: flex;
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
       align-items: center;
-      justify-content: center;
-      min-height: 60px;
-      padding: 8px 64px;
-      background: var(--btn-bg);
-      border: 1px solid var(--btn-border);
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      gap: 14px;
+      padding: 10px 16px 10px 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, var(--glass-hi), var(--glass));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       color: var(--text);
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: transform 0.15s ease, background 0.15s ease;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .links a:hover {
-      background: var(--btn-bg-hover);
-      transform: scale(1.02);
-    }
-
-    .links a:focus-visible,
-    .socials a:focus-visible {
-      outline: 2px solid var(--text);
-      outline-offset: 3px;
-    }
-
-    .links img {
+    /* Cursor-following glow */
+    .card::before {
+      content: "";
       position: absolute;
-      left: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 46px;
-      height: 46px;
-      border-radius: 6px;
-      object-fit: cover;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(260px circle at var(--mx) var(--my), color-mix(in srgb, var(--c) 22%, transparent), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
-    footer {
-      margin-top: 40px;
-      font-size: 0.8rem;
+    /* HUD corner brackets */
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      pointer-events: none;
+      --b: 1.5px;
+      --s: 12px;
+      background:
+        linear-gradient(var(--c), var(--c)) top left / var(--s) var(--b),
+        linear-gradient(var(--c), var(--c)) top left / var(--b) var(--s),
+        linear-gradient(var(--c), var(--c)) top right / var(--s) var(--b),
+        linear-gradient(var(--c), var(--c)) top right / var(--b) var(--s),
+        linear-gradient(var(--c), var(--c)) bottom left / var(--s) var(--b),
+        linear-gradient(var(--c), var(--c)) bottom left / var(--b) var(--s),
+        linear-gradient(var(--c), var(--c)) bottom right / var(--s) var(--b),
+        linear-gradient(var(--c), var(--c)) bottom right / var(--b) var(--s);
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--c) 45%, transparent);
+      box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--c) 45%, transparent);
+    }
+    .card:hover::before,
+    .card:focus-visible::before { opacity: 1; }
+    .card:hover::after,
+    .card:focus-visible::after { opacity: 1; transform: none; }
+    .card:focus-visible { outline: none; }
+
+    .card img {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .card .meta { min-width: 0; text-align: left; }
+    .card .top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .card .tag { color: var(--c); }
+    .card .title {
+      display: block;
+      margin-top: 3px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .card .sub {
+      display: block;
+      margin-top: 2px;
+      font-family: var(--mono);
+      font-size: 11px;
       color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card .go {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      transition: transform 0.25s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .card .go svg { width: 16px; height: 16px; }
+    .card:hover .go,
+    .card:focus-visible .go {
+      color: #04050a;
+      background: var(--c);
+      border-color: var(--c);
+      transform: rotate(-45deg);
+    }
+
+    .c-fb   { --c: #4f8bff; }
+    .c-yt   { --c: var(--red); }
+    .c-app  { --c: var(--pink); }
+    .c-tv   { --c: #ffc24f; }
+    .c-hack { --c: var(--violet); }
+
+    /* ---------- Footer ---------- */
+    footer {
+      margin-top: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .socials { display: flex; gap: 10px; }
+    .socials a {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      color: var(--text);
+      transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .socials a:hover,
+    .socials a:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      outline: none;
+    }
+    .socials svg { width: 20px; height: 20px; }
+
+    .sig {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.8;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .links a, .socials a { transition: none; }
-      .links a:hover, .socials a:hover { transform: none; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0ms !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="backdrop" aria-hidden="true"></div>
+  <div class="bg" aria-hidden="true">
+    <div class="aurora"><span></span><span></span><span></span></div>
+    <div class="road"></div>
+    <div class="grain"></div>
+  </div>
 
   <main>
-    <img class="avatar" src="assets/profile.jpg" alt="Driver's view from inside the Kia Seltos GTX" width="96" height="96">
-    <h1>@seltos.gtx</h1>
-    <p class="bio">
-      Kia Seltos GTX 2026 🖤🤍<br>
-      Aurora Black Pearl<br>
-      Owner POV • Real reviews • No fluff
-    </p>
+    <div class="statusbar">
+      <span class="live">Online</span>
+      <span>GTX // MY26</span>
+      <time id="clock">--:--:--</time>
+    </div>
 
-    <nav class="socials" aria-label="Social profiles">
-      <a href="https://instagram.com/seltos.gtx" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38A5.88 5.88 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13a5.88 5.88 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.88 5.88 0 0 0 2.13-1.38 5.88 5.88 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.88 5.88 0 0 0-1.38-2.13A5.88 5.88 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/>
+    <header class="hero">
+      <div class="gauge">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <linearGradient id="revGrad" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#2de2e6"/>
+              <stop offset="0.7" stop-color="#8a6cff"/>
+              <stop offset="1" stop-color="#ff3b5c"/>
+            </linearGradient>
+          </defs>
+          <g id="ticks"></g>
+          <circle class="track" cx="100" cy="100" r="74" pathLength="100" stroke-dasharray="75 100" transform="rotate(135 100 100)"/>
+          <circle class="rev" cx="100" cy="100" r="74" pathLength="100" transform="rotate(135 100 100)"/>
+          <g class="spin">
+            <circle cx="100" cy="100" r="99" fill="none" stroke="rgba(45,226,230,0.35)" stroke-width="0.8" stroke-dasharray="2 6"/>
+          </g>
         </svg>
-      </a>
-    </nav>
+        <img class="avatar" src="assets/profile.jpg" alt="Driver's view from inside the Kia Seltos GTX" width="124" height="124">
+        <span class="badge">GTX</span>
+      </div>
+
+      <h1>@seltos.gtx</h1>
+
+      <div class="led" aria-hidden="true" id="led"></div>
+
+      <p class="typed" aria-label="Owner POV, real reviews, no fluff">
+        <span class="prompt">&gt;</span> <span id="typed" aria-hidden="true">Owner POV</span><span class="caret" aria-hidden="true"></span>
+      </p>
+
+      <ul class="chips">
+        <li>Kia Seltos GTX 2026</li>
+        <li><span class="swatch" aria-hidden="true"></span>Aurora Black Pearl</li>
+      </ul>
+    </header>
+
+    <div class="section-head"><span>// Quick links</span><b>05 routes</b></div>
 
     <ul class="links">
-      <li>
-        <a href="https://www.facebook.com/seltos.gtx" target="_blank" rel="noopener">
-          <img src="assets/facebook.jpg" alt="" width="46" height="46">
-          Facebook
+      <li style="--d:0">
+        <a class="card c-yt" href="https://youtube.com/@seltosgtx" target="_blank" rel="noopener">
+          <img src="assets/youtube.jpg" alt="" width="52" height="52">
+          <span class="meta">
+            <span class="top"><span>01</span><span class="tag">Watch</span></span>
+            <span class="title">YouTube</span>
+            <span class="sub">@seltosgtx · drives &amp; reviews</span>
+          </span>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </li>
-      <li>
-        <a href="https://youtube.com/@seltosgtx" target="_blank" rel="noopener">
-          <img src="assets/youtube.jpg" alt="" width="46" height="46">
-          Youtube
+      <li style="--d:1">
+        <a class="card c-fb" href="https://www.facebook.com/seltos.gtx" target="_blank" rel="noopener">
+          <img src="assets/facebook.jpg" alt="" width="52" height="52">
+          <span class="meta">
+            <span class="top"><span>02</span><span class="tag">Social</span></span>
+            <span class="title">Facebook</span>
+            <span class="sub">facebook.com/seltos.gtx</span>
+          </span>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </li>
-      <li>
-        <a href="https://apps.apple.com/app/id1630403500" target="_blank" rel="noopener">
-          <img src="assets/aptv.jpg" alt="" width="46" height="46">
-          APTV App
+      <li style="--d:2">
+        <a class="card c-app" href="https://apps.apple.com/app/id1630403500" target="_blank" rel="noopener">
+          <img src="assets/aptv.jpg" alt="" width="52" height="52">
+          <span class="meta">
+            <span class="top"><span>03</span><span class="tag">App</span></span>
+            <span class="title">APTV App</span>
+            <span class="sub">App Store · iOS</span>
+          </span>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </li>
-      <li>
-        <a href="https://akumar36.github.io/freeiptv/" target="_blank" rel="noopener">
-          <img src="assets/tv.jpg" alt="" width="46" height="46">
-          TV Channels Link
+      <li style="--d:3">
+        <a class="card c-tv" href="https://akumar36.github.io/freeiptv/" target="_blank" rel="noopener">
+          <img src="assets/tv.jpg" alt="" width="52" height="52">
+          <span class="meta">
+            <span class="top"><span>04</span><span class="tag">Stream</span></span>
+            <span class="title">TV Channels Link</span>
+            <span class="sub">akumar36.github.io/freeiptv</span>
+          </span>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </li>
-      <li>
-        <a href="https://yt-chi-seven.vercel.app" target="_blank" rel="noopener">
-          <img src="assets/yt-hack.jpg" alt="" width="46" height="46">
-          Fullscreen youtube hack
+      <li style="--d:4">
+        <a class="card c-hack" href="https://yt-chi-seven.vercel.app" target="_blank" rel="noopener">
+          <img src="assets/yt-hack.jpg" alt="" width="52" height="52">
+          <span class="meta">
+            <span class="top"><span>05</span><span class="tag">Hack</span></span>
+            <span class="title">Fullscreen YouTube hack</span>
+            <span class="sub">yt-chi-seven.vercel.app</span>
+          </span>
+          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </li>
     </ul>
 
-    <footer>© seltos.gtx</footer>
+    <footer>
+      <nav class="socials" aria-label="Social profiles">
+        <a href="https://instagram.com/seltos.gtx" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.3-1.46.72-2.13 1.38A5.88 5.88 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.3.79.72 1.46 1.38 2.13a5.88 5.88 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.88 5.88 0 0 0 2.13-1.38 5.88 5.88 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.88 5.88 0 0 0-1.38-2.13A5.88 5.88 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+        </a>
+        <a href="https://youtube.com/@seltosgtx" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/seltos.gtx" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.5h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/></svg>
+        </a>
+      </nav>
+      <p class="sig">© <span id="year">2026</span> seltos.gtx<br>self-hosted · zero trackers</p>
+    </footer>
   </main>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Tachometer ticks: 270° sweep, last stretch is the redline
+      var ticks = document.getElementById("ticks");
+      var NS = "http://www.w3.org/2000/svg";
+      for (var i = 0; i <= 36; i++) {
+        var a = (135 + i * 7.5) * Math.PI / 180;
+        var major = i % 4 === 0;
+        var r1 = 84, r2 = major ? 93 : 89;
+        var line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", 100 + r1 * Math.cos(a));
+        line.setAttribute("y1", 100 + r1 * Math.sin(a));
+        line.setAttribute("x2", 100 + r2 * Math.cos(a));
+        line.setAttribute("y2", 100 + r2 * Math.sin(a));
+        line.setAttribute("class", "tick" + (major ? " major" : "") + (i >= 30 ? " red" : ""));
+        ticks.appendChild(line);
+      }
+
+      // Welcome LED light bar
+      var led = document.getElementById("led");
+      for (var j = 0; j < 22; j++) {
+        var dot = document.createElement("i");
+        dot.style.setProperty("--i", Math.abs(j - 10.5));
+        led.appendChild(dot);
+      }
+
+      // Live clock
+      var clock = document.getElementById("clock");
+      function tick() {
+        clock.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Typewriter tagline
+      var words = ["Owner POV", "Real reviews", "No fluff"];
+      var el = document.getElementById("typed");
+      if (!reduce) {
+        var w = 0, c = words[0].length, deleting = true;
+        setTimeout(function type() {
+          var word = words[w];
+          c += deleting ? -1 : 1;
+          el.textContent = word.slice(0, c);
+          var delay = deleting ? 45 : 85;
+          if (!deleting && c === word.length) { deleting = true; delay = 1800; }
+          else if (deleting && c === 0) { deleting = false; w = (w + 1) % words.length; word = words[w]; delay = 300; }
+          setTimeout(type, delay);
+        }, 1800);
+      }
+
+      // Cursor-following glow on cards
+      document.querySelectorAll(".card").forEach(function (card) {
+        card.addEventListener("pointermove", function (e) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          card.style.setProperty("--my", (e.clientY - r.top) + "px");
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
